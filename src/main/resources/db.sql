@@ -1,5 +1,5 @@
-CREATE DATABASE  IF NOT EXISTS `JAVAERP`;
-USE `accounts`;
+CREATE DATABASE  IF NOT EXISTS `javaerp`;
+USE `javaerp`;
 --
 -- Table structure for table `role`
 --
@@ -16,7 +16,9 @@ CREATE TABLE `role` (
 --
 
 LOCK TABLES `role` WRITE;
-INSERT INTO `role` VALUES (1,'ROLE_USER');
+INSERT INTO `role` VALUES (1,'ROLE_ADMIN');
+INSERT INTO `role` VALUES (2,'ROLE_MANAGER');
+INSERT INTO `role` VALUES (3,'ROLE_WAITER');
 UNLOCK TABLES;
 
 --
@@ -27,20 +29,14 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) DEFAULT NULL,
+    `role_id` int(11) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `name` varchar(255) DEFAULT NULL,
+    `lastname` varchar(255) DEFAULT NULL,
+    `document_number` varchar(255) DEFAULT NULL,
+    `telephone` varchar(255) DEFAULT NULL,
+    `email` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+CONSTRAINT `fk_user_role_roleid` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
---
--- Table structure for table `user_role`
---
-
-DROP TABLE IF EXISTS `user_role`;
-CREATE TABLE `user_role` (
-  `user_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL,
-  PRIMARY KEY (`user_id`,`role_id`),
-  KEY `fk_user_role_roleid_idx` (`role_id`),
-  CONSTRAINT `fk_user_role_roleid` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_user_role_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;

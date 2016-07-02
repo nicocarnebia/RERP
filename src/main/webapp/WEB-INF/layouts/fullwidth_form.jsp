@@ -29,7 +29,7 @@
         <![endif]-->
     </head>
 
-    <body>
+    <body class="fullwidth">
         <div class="container">
 
             <layout:block name="content">

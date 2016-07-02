@@ -8,10 +8,10 @@
 		http://www.springframework.org/schema/security/spring-security.xsd">
 
     <http auto-config="true">
-        <intercept-url pattern="/" access="hasRole('ROLE_USER')"/>
-        <intercept-url pattern="/welcome" access="hasRole('ROLE_USER')"/>
-        <form-login login-page="/login" default-target-url="/welcome" authentication-failure-url="/login?error" username-parameter="username" password-parameter="password"/>
-        <logout logout-success-url="/login?logout" />
+        <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
+        <!--<intercept-url pattern="/welcome" access="hasRole('ROLE_USER')-->
+        <form-login login-page="/admin/login" default-target-url="/admin" authentication-failure-url="/admin/login?error" username-parameter="username" password-parameter="password"/>
+        <logout logout-success-url="/admin/login?logout" />
     </http>
 
     <authentication-manager alias="authenticationManager">
@@ -23,7 +23,7 @@
     <beans:bean id="userDetailsServiceImpl" class="com.javaerp.service.UserDetailsServiceImpl"></beans:bean>
 
     <beans:bean id="encoder"
-          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+                class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
         <beans:constructor-arg name="strength" value="11"/>
     </beans:bean>
 </beans:beans>

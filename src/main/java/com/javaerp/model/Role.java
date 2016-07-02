@@ -6,6 +6,7 @@ import java.util.Set;
 @Entity
 @Table(name = "role")
 public class Role {
+
     private Long id;
     private String name;
     private Set<User> users;
@@ -28,7 +29,7 @@ public class Role {
         this.name = name;
     }
 
-    @ManyToMany(mappedBy = "roles")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "role")
     public Set<User> getUsers() {
         return users;
     }

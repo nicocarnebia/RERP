@@ -1,17 +1,18 @@
 package com.javaerp.model;
 
-
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "user")
 public class User {
+
     private Long id;
     private String username;
     private String password;
     private String passwordConfirm;
-    private Set<Role> roles;
+    private Role role;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,13 +49,14 @@ public class User {
         this.passwordConfirm = passwordConfirm;
     }
 
-    @ManyToMany
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    public Set<Role> getRoles() {
-        return roles;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
+
 }

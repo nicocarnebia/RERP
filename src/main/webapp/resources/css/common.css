@@ -3,7 +3,9 @@ body {
     padding-bottom: 40px;
     background-color: #eee;
 }
-
+body.fullwidth{
+    background: #d2d6de;
+}
 .form-signin {
     max-width: 330px;
     padding: 15px;
@@ -17,16 +19,6 @@ body {
 
 .form-signin .checkbox {
     font-weight: normal;
-}
-
-.form-signin .form-control {
-    position: relative;
-    height: auto;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 10px;
-    font-size: 16px;
 }
 
 .form-signin .form-control:focus {

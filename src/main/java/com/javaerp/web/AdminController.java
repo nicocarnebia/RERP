@@ -1,6 +1,7 @@
 package com.javaerp.web;
 
 import com.javaerp.model.User;
+import com.javaerp.service.RoleServiceImpl;
 import com.javaerp.service.SecurityService;
 import com.javaerp.service.UserService;
 import com.javaerp.validator.UserValidator;
@@ -12,10 +13,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@Controller
-public class UserController {
+@Controller("/admin")
+public class AdminController {
+
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleServiceImpl roleService;
 
     @Autowired
     private SecurityService securityService;
@@ -23,21 +28,21 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
 
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/registration", method = RequestMethod.GET)
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
 
-        return "registration";
+        return "admin/registration";
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/registration", method = RequestMethod.POST)
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "registration";
+            return "admin/registration";
         }
-
+        userForm.setRole(roleService.findByName("ROLE_ADMIN"));
         userService.save(userForm);
 
         securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
@@ -45,19 +50,22 @@ public class UserController {
         return "redirect:/welcome";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    public String index() {
+        return "admin/welcome";
+    }
+
+    @RequestMapping(value = "/admin/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
-        if (error != null)
+        if (error != null) {
             model.addAttribute("error", "Your username and password is invalid.");
+        }
 
-        if (logout != null)
+        if (logout != null) {
             model.addAttribute("message", "You have been logged out successfully.");
+        }
 
-        return "login";
+        return "admin/login";
     }
 
-    @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
-    public String welcome(Model model) {
-        return "welcome";
-    }
 }
